@@ -1,0 +1,32 @@
+# Maven build outputs (whitelist only needed JAR)
+target/
+!target/calculator-1.0.jar
+
+# Maven cache
+.m2/
+
+# Source code and tests (rebuilt in layers/CI)
+src/
+
+# Git
+.git/
+.gitignore
+
+# IDE / Editor
+.idea/
+.vscode/
+*.iml
+*.iws
+.project
+.settings/
+
+# OS generated
+.DS_Store
+Thumbs.db
+.DS_Store?
+
+# Logs and temp
+*.log
+logs/
+target
+
