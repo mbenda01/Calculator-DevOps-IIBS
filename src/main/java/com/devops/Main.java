@@ -4,7 +4,7 @@ public class Main {
 
     public static void main(String[] args) {
         if (args.length < 3) {
-            System.out.println("Usage: java -jar calculator-1.0.jar <nombre> <operateur> <nombre>");
+            System.out.println("Usage: java -jar calculator-devops.jar <nombre> <operateur> <nombre>");
             System.out.println("Operateurs disponibles: + - * /");
             System.exit(1);
         }

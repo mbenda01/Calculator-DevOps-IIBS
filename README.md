@@ -1,38 +1,57 @@
 # Calculator DevOps
 
-Application calculatrice Java SE avec pipeline CI/CD complet (GitHub Actions → DockerHub).
+Application Java 17 de calculatrice en ligne de commande, avec pipeline CI/CD GitHub Actions pour Maven, Nexus et DockerHub.
 
-[![CI/CD](https://github.com/[YOUR-USERNAME]/calculator-devops/workflows/CI/CD%20Calculator%20DevOps/badge.svg)](https://github.com/[YOUR-USERNAME]/calculator-devops/actions)
+## Prerequis
 
-## Prérequis
 - Java 17
 - Maven 3.8+
 - Docker
 
 ## Utilisation locale
+
 ```bash
 mvn clean package
-java -jar target/calculator-1.0.jar 10 + 5
-java -jar target/calculator-1.0.jar 10 / 0  # Lance ArithmeticException
+java -jar target/calculator-devops.jar 10 + 5
+java -jar target/calculator-devops.jar 10 / 0
 ```
 
 ## Tests
+
 ```bash
 mvn test
 ```
 
 ## Docker
+
 ```bash
-docker build -t java-calculator:v1.0 .
-docker run java-calculator:v1.0 10 + 5
+mvn -DskipTests package
+docker build -t calculator-devops:local .
+docker run --rm calculator-devops:local 10 + 5
 ```
 
 ## Pipeline CI/CD
-- **Compile**: `mvn compile`
-- **Test**: `mvn test` (JUnit 5)
-- **Package**: `mvn package` → `calculator-1.0.jar`
-- **Deploy**: Build/push `java-calculator:v1.0` to DockerHub
 
-Trigger: push/PR to `main`. Secrets: `DOCKERHUB_USERNAME`, `DOCKERHUB_TOKEN`.
+Chaque `push` declenche automatiquement :
 
-Image: [DockerHub](https://hub.docker.com/r/[YOUR-USERNAME]/java-calculator)
+- la compilation Maven
+- les tests Maven
+- la publication du `.jar` sur Nexus apres validation des tests
+- la construction et le push de l'image Docker sur DockerHub
+- l'execution de l'image Docker publiee sur le runner pour verifier son fonctionnement
+
+Le pipeline utilise une version Maven de type `1.0.<run_number>-SNAPSHOT`, ce qui permet de versionner automatiquement les artefacts Nexus a chaque execution.
+
+Les images Docker sont poussees avec deux tags :
+
+- `1.0.<run_number>`
+- `sha-<commit_sha>`
+
+## Secrets GitHub requis
+
+- `NEXUS_USERNAME`
+- `NEXUS_PASSWORD`
+- `NEXUS_SNAPSHOT_URL`
+- `NEXUS_RELEASE_URL`
+- `DOCKERHUB_USERNAME`
+- `DOCKERHUB_TOKEN`

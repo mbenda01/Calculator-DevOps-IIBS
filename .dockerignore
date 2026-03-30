@@ -1,6 +1,6 @@
 # Maven build outputs (whitelist only needed JAR)
 target/
-!target/calculator-1.0.jar
+!target/calculator-devops.jar
 
 # Maven cache
 .m2/
@@ -28,5 +28,3 @@ Thumbs.db
 # Logs and temp
 *.log
 logs/
-target
-
