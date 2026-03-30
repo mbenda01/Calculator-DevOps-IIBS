@@ -26,6 +26,7 @@
     </dependencies>
 
     <build>
+        <finalName>calculator-1.0</finalName>
         <plugins>
             <!-- Plugin pour générer un .jar exécutable -->
             <plugin>
@@ -33,13 +34,12 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>com.devops.Main</mainClass>
-                        </manifest>
-                    </archive>
-                    <finalName>calculator-1.0</finalName>
-                </configuration>
+                  <archive>
+                      <manifest>
+                          <mainClass>com.devops.Main</mainClass>
+                      </manifest>
+                  </archive>
+              </configuration>
             </plugin>
             <!-- Plugin Surefire pour JUnit 5 -->
             <plugin>
