@@ -75,7 +75,7 @@ services:
 
   # ── java-calculator (pour simulation de logs) ────────────
   calculator:
-    image: ${DOCKERHUB_USERNAME:-monuser}/java-calculator:v1.0
+    image: mbenda01/java-calculator:v1.0
     container_name: java-calculator
     # Envoie les logs vers Logstash via TCP
     logging:
