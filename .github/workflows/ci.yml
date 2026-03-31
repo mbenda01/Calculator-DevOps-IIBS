@@ -50,7 +50,7 @@ jobs:
   # ─────────────────────────────────────────────
   package-nexus:
     name: "Job 2 — Package & Nexus"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: ci-test
 
     steps:
