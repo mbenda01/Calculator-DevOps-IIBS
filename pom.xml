@@ -34,19 +34,48 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                  <archive>
-                      <manifest>
-                          <mainClass>com.devops.Main</mainClass>
-                      </manifest>
-                  </archive>
-              </configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.devops.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
             </plugin>
+
             <!-- Plugin Surefire pour JUnit 5 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.1.2</version>
             </plugin>
+
+            <!-- Plugin Deploy pour publier sur Nexus -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.1</version>
+            </plugin>
         </plugins>
     </build>
+
+    <!--
+        Configuration du dépôt Nexus pour mvn deploy.
+        L'URL est injectée par la variable d'environnement NEXUS_URL
+        dans le pipeline GitHub Actions.
+        Les credentials sont définis dans ~/.m2/settings.xml
+        (généré automatiquement par le pipeline via s4u/maven-settings-action).
+    -->
+    <distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <name>Nexus Release Repository</name>
+            <url>${env.NEXUS_URL}/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-releases</id>
+            <name>Nexus Snapshot Repository</name>
+            <url>${env.NEXUS_URL}/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
 </project>

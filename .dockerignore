@@ -1,0 +1,46 @@
+# Source code (pas nécessaire dans l'image, seul le .jar est copié)
+src/
+
+# Fichiers Maven sauf le jar final
+pom.xml
+.mvn/
+mvnw
+mvnw.cmd
+
+# Répertoire target sauf le jar final
+target/
+!target/calculator-1.0.jar
+
+# Fichiers Git
+.git/
+.gitignore
+.gitattributes
+
+# GitHub Actions
+.github/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.eclipse
+*.project
+*.classpath
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Docs et rapports
+*.md
+*.pdf
+README*
+
+# Logs
+*.log
+logs/

@@ -1,0 +1,99 @@
+version: '3.8'
+
+# ─────────────────────────────────────────────────────────────
+# Stack ELK — Monitoring des logs de java-calculator
+# Elasticsearch 8 + Logstash + Kibana
+# ─────────────────────────────────────────────────────────────
+
+services:
+
+  # ── Elasticsearch ────────────────────────────────────────
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
+    container_name: elasticsearch
+    environment:
+      - node.name=elasticsearch
+      - discovery.type=single-node
+      - xpack.security.enabled=false        # Désactivé pour simplifier en dev
+      - xpack.security.http.ssl.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - elk
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -q '\"status\":\"green\\|yellow\"'"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+
+  # ── Logstash ─────────────────────────────────────────────
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.13.0
+    container_name: logstash
+    volumes:
+      - ./elk/logstash/pipeline:/usr/share/logstash/pipeline:ro
+      - ./elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+    ports:
+      - "5044:5044"     # Beats input
+      - "5000:5000/tcp" # TCP input (logs java-calculator)
+      - "5000:5000/udp"
+      - "9600:9600"     # API Logstash
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - elk
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  # ── Kibana ───────────────────────────────────────────────
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.13.0
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - xpack.security.enabled=false
+    networks:
+      - elk
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:5601/api/status | grep -q 'available'"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ── java-calculator (pour simulation de logs) ────────────
+  calculator:
+    image: ${DOCKERHUB_USERNAME:-monuser}/java-calculator:v1.0
+    container_name: java-calculator
+    # Envoie les logs vers Logstash via TCP
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://localhost:5000"
+        tag: "java-calculator"
+    networks:
+      - elk
+    depends_on:
+      - logstash
+    # Exemple d'exécution par défaut (peut être surchargé)
+    command: ["10", "+", "5"]
+
+volumes:
+  elasticsearch-data:
+    driver: local
+
+networks:
+  elk:
+    driver: bridge
