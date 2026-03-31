@@ -51,7 +51,9 @@ jobs:
   package-nexus:
     name: "Job 2 — Package & Nexus"
     runs-on: ubuntu-latest
-    needs: ci-test   # Bloqué si les tests échouent
+    needs: ci-test
+    env:                                             # ✅ FIX — NEXUS_URL au niveau job
+      NEXUS_URL: ${{ secrets.NEXUS_URL }}            # ← Maven peut maintenant lire ${env.NEXUS_URL}
 
     steps:
       - name: Checkout du code
@@ -79,8 +81,7 @@ jobs:
 
       - name: Publication du .jar sur Nexus
         run: mvn deploy -DskipTests --no-transfer-progress
-        env:
-          NEXUS_URL: ${{ secrets.NEXUS_URL }}
+        # ✅ FIX — env: NEXUS_URL supprimé ici, déplacé au niveau job ci-dessus
 
       - name: Sauvegarde du .jar pour les jobs suivants
         uses: actions/upload-artifact@v4
@@ -95,7 +96,7 @@ jobs:
   docker-build-push:
     name: "Job 3 — Docker Build & Push"
     runs-on: ubuntu-latest
-    needs: ci-test   # Bloqué si les tests échouent
+    needs: ci-test
 
     steps:
       - name: Checkout du code
@@ -116,6 +117,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+          # ✅ FIX — Assure-toi que DOCKERHUB_TOKEN a le scope Read+Write+Delete sur DockerHub
 
       - name: Build de l'image Docker
         run: |
@@ -139,7 +141,7 @@ jobs:
   deploy-validate:
     name: "Job 4 — Deploy & Validation"
     runs-on: ubuntu-latest
-    needs: docker-build-push   # Attend que l'image soit publiée
+    needs: docker-build-push
 
     steps:
       - name: Login sur DockerHub
