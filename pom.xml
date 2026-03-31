@@ -21,6 +21,11 @@
             <version>5.10.3</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>7.4</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -45,12 +50,12 @@
             </plugin>
         </plugins>
     </build>
-    <!-- Ajouter distributionManagement pour Nexus -->
+
     <distributionManagement>
         <repository>
             <id>nexus</id>
             <name>Nexus Releases</name>
-    <url>${env.NEXUS_URL}/repository/maven-releases/</url>
+            <url>${env.NEXUS_URL}/repository/maven-releases/</url>
         </repository>
         <snapshotRepository>
             <id>nexus</id>
@@ -58,12 +63,5 @@
             <url>http://localhost:8081/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
-
-
-    <dependency>
-    <groupId>net.logstash.logback</groupId>
-    <artifactId>logstash-logback-encoder</artifactId>
-    <version>7.4</version>
-    </dependency>
 
 </project>
