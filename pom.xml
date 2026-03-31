@@ -7,12 +7,13 @@
     <groupId>com.devops</groupId>
     <artifactId>calculator-devops</artifactId>
     <version>${revision}</version>
+    <name>calculator-devops</name>
+    <description>Calculatrice console Java 17 avec pipeline CI/CD DevOps</description>
     <packaging>jar</packaging>
 
     <properties>
         <revision>1.0.0-SNAPSHOT</revision>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -40,6 +41,14 @@
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <release>${maven.compiler.release}</release>
+                </configuration>
+            </plugin>
             <!-- Plugin pour générer un .jar exécutable -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

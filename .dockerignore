@@ -1,6 +1,6 @@
 # Maven build outputs (whitelist only needed JAR)
 target/
-!target/calculator-devops.jar
+!target/*.jar
 
 # Maven cache
 .m2/

@@ -15,7 +15,7 @@ public class Calculator {
     }
 
     public double divide(double a, double b) {
-        if (b == 0) {
+        if (Double.compare(b, 0.0d) == 0) {
             throw new ArithmeticException("Division par zéro impossible");
         }
         return a / b;

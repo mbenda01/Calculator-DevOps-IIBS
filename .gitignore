@@ -11,3 +11,9 @@ target/
 # OS
 .DS_Store
 Thumbs.db
+
+# ELK demo logs
+elk/logs/*.log
+
+# Local assistant metadata
+.codex
