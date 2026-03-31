@@ -59,22 +59,19 @@
     </build>
 
     <!--
-        Configuration du dépôt Nexus pour mvn deploy.
-        L'URL est injectée par la variable d'environnement NEXUS_URL
-        dans le pipeline GitHub Actions.
-        Les credentials sont définis dans ~/.m2/settings.xml
-        (généré automatiquement par le pipeline via s4u/maven-settings-action).
+        L'URL réelle est injectée via -DaltDeploymentRepository dans le pipeline.
+        Ces URLs sont des fallbacks jamais utilisées directement en CI.
     -->
     <distributionManagement>
         <repository>
             <id>nexus-releases</id>
             <name>Nexus Release Repository</name>
-            <url>${env.NEXUS_URL}/repository/maven-releases/</url>
+            <url>http://localhost:8081/repository/maven-releases/</url>
         </repository>
         <snapshotRepository>
             <id>nexus-releases</id>
             <name>Nexus Snapshot Repository</name>
-            <url>${env.NEXUS_URL}/repository/maven-snapshots/</url>
+            <url>http://localhost:8081/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
