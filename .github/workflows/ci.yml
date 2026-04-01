@@ -5,10 +5,12 @@ on:
     branches:
       - main
       - develop
+      - Marieme_Ndiaye   
   pull_request:
     branches:
       - main
       - develop
+      - Marieme_Ndiaye   
   workflow_dispatch:
 
 permissions:
