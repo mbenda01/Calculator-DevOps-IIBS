@@ -34,5 +34,14 @@ services:
     ports:
       - "5601:5601"
 
+  nexus:
+    image: sonatype/nexus3:latest
+    container_name: calculator-nexus
+    ports:
+      - "8081:8081"
+    volumes:
+      - nexus-data:/nexus-data
+
 volumes:
   esdata:
+  nexus-data:
