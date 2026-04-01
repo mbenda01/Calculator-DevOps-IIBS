@@ -52,6 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-and-test
     if: github.event_name == 'push'
+    continue-on-error: true # Permet de ne pas bloquer le Job 4 en cas d'échec local
     env:
       NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
       NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
@@ -148,6 +149,7 @@ jobs:
         with:
           context: .
           push: true
+          no-cache: true # Force l'envoi vers Docker Hub
           build-args: |
             JAR_FILE=${{ env.JAR_FILE }}
           tags: |
@@ -159,7 +161,7 @@ jobs:
     name: Job 4 - Deploy Validation
     runs-on: ubuntu-latest
     needs:
-      - docker-image # Correction : ne dépend plus de Nexus (publish-jar)
+      - docker-image # Ne dépend plus de Nexus pour pouvoir se lancer
     if: github.event_name == 'push'
 
     steps:
@@ -170,7 +172,8 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Pull Docker image from DockerHub
-        run: docker pull "${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_SHA_TAG}"
+        run: |
+          docker pull "${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_SHA_TAG}"
 
       - name: Run Docker image and assert calculator result
         run: |
