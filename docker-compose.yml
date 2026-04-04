@@ -63,6 +63,7 @@ services:
     volumes:
       - ./target/calculator-1.0.jar:/app/calculator-1.0.jar
       - ./elk/run-calculations.sh:/app/run-calculations.sh
+      - ./elk/run-single.sh:/app/run-single.sh
     entrypoint: ["sh", "/app/run-calculations.sh"]
     networks:
       - elk

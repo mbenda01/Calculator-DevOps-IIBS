@@ -77,11 +77,14 @@ docker ps
 # Script complet (10 calculs : additions, soustractions, multiplications, divisions, erreurs)
 docker-compose run --rm calculator
 
-# Calcul unique
-docker-compose run --rm --entrypoint "java -jar /app/calculator-1.0.jar 10 + 5" calculator
-docker-compose run --rm --entrypoint "java -jar /app/calculator-1.0.jar 6 * 7" calculator
-docker-compose run --rm --entrypoint "java -jar /app/calculator-1.0.jar 10 / 0" calculator
+# Calcul unique AVEC envoi des logs vers Kibana (utiliser run-single.sh)
+docker-compose run --rm --entrypoint "sh /app/run-single.sh 10 + 5" calculator
+docker-compose run --rm --entrypoint "sh /app/run-single.sh 6 * 7" calculator
+docker-compose run --rm --entrypoint "sh /app/run-single.sh 10 / 0" calculator
 ```
+
+> ⚠️ Ne pas utiliser `--entrypoint "java -jar ..."` directement : le résultat s'affiche en console
+> mais les logs ne sont **pas** envoyés à Logstash/Kibana. Toujours utiliser `run-single.sh`.
 
 ### Pipeline Logstash (`elk/logstash/pipeline/calculator.conf`)
 
