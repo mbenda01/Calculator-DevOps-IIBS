@@ -25,6 +25,18 @@
         </dependency>
     </dependencies>
 
+    <!-- Dépôts Nexus pour mvn deploy -->
+    <distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <url>${env.NEXUS_URL}/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <url>${env.NEXUS_SNAPSHOT_URL}</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <build>
         <finalName>calculator-1.0</finalName>
         <plugins>
